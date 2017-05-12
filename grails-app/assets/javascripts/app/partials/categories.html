@@ -1,0 +1,127 @@
+<toaster-container toaster-options="{'time-out': 3000, 'close-button':true, 'animation-class': 'toast-top-center'}"></toaster-container>
+<!-- <div style="margin-top:6em"> -->
+  <div class="container div-main">
+    <div class="row">
+
+      <h3>CATEGORIES</h3>
+      <form class="form-inline">
+        <input type="text" class="form-control" placeholder="Category Name" ng-model="newname">
+        <button type="button" class="btn btn-primary" ng-click="addCategory(newname)">
+          <span class="glyphicon glyphicon-plus"></span> Add Category
+        </button>
+      </form>
+      <tabset vertical="true">
+        <div class="row">
+          <div class="col-md-4 col-sm-6">
+            <h3><tab class="nav nav-pill nav-stacked categ" ng-repeat="category in categories" ng-click="selectCategory(category)" heading="{{category.name}}" select="setCategory(category)"></tab></h3>
+          </div>
+          <div class="col-md-8 col-sm-6" ng-show="show">
+            <div class="row">
+              <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped">
+                <tbody>
+                  <tr>
+
+                  </tr>
+                  <tr>
+                    <th> <h4> CATEGORY : {{category.name}} </h4> </th>
+                    <th class="col-md-2">
+                      <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalEditCategory" data-dismiss="modal"><span class="glyphicon glyphicon-check"></span> Update</button>
+                    </th>
+                    <th st-sort="color">
+                      <button type="button" class="btn btn-danger" mwl-confirm title="Delete Category" message="Do you want to remove this category?" confirm-text="<span class='glyphicon glyphicon-ok'></span> Yes" cancel-text="<span class='glyphicon glyphicon-remove'></span> No"
+                        placement="top" on-confirm="deleteCategory(category)" on-cancel="cancelClicked = true" confirm-button-type="primary" cancel-button-type="danger"><span class="glyphicon glyphicon-trash"></span> Remove
+                      </button>
+                    </th>
+                    <th>
+                      <form class="form-inline form-horizontal">
+                        <input ng-model="subCategoryName.content" type="text" placeholder="Subcategory Name" class="form-control">
+                        <button ng-click="addSubCategory()"><span class="glyphicon glyphicon-plus"></span> Add</button>
+                      </form>
+                    </th>
+                    <th>
+                    </th>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped">
+              <tbody>
+                <tr>
+                  <th st-sort="name" class="col-md-4">NAME</th>
+                  <th class="col-md-4"></th>
+                </tr>
+                <tr ng-repeat="subcategory in subCategories">
+                  <td ng-if="subcategory.category.id==selectedCategory.id">{{subcategory.name}}</td>
+                  <td ng-if="subcategory.category.id==selectedCategory.id">
+                    <button class="btn btn-success btn-sm" ng-click="selectSubCategory(subcategory)" data-toggle="modal" data-target="#modalEditSubCategory" data-dismiss="modal"><span class="glyphicon glyphicon-check"></span> Update</button>
+                    <button class="btn btn-danger btn-sm" mwl-confirm title="Delete Subcategory" message="Do you want to remove this subcategory?" confirm-text="<span class='glyphicon glyphicon-ok'></span> Yes" cancel-text="<span class='glyphicon glyphicon-remove'></span> No"
+                      placement="top" on-confirm="deleteSubCategory(subcategory)" on-cancel="cancelClicked = true" confirm-button-type="primary" cancel-button-type="danger"><span class="glyphicon glyphicon-trash"></span> Remove</button>
+                  </td>
+                </tr>
+          </div>
+        </div>
+      </tabset>
+
+      <div class="modal fade" id="modalEditCategory" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Edit Category</h4>
+            </div>
+            <div class="modal-body">
+              <div>
+                <div class="col-md-3">
+                  Name:
+                </div>
+                <div class="col-md-8">
+                  <input type="text" ng-model="category.name">
+                </div>
+              </div>
+            </div>
+            <br>
+            <br>
+
+            <div class="modal-footer">
+              <button class="btn btn-success btn-sm" ng-click="update()" data-dismiss="modal">
+                <span class="glyphicon glyphicon-check"></span> Save
+              </button>
+              <button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-trash"></span> Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="modalEditSubCategory" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">EDIT Subcategory</h4>
+            </div>
+            <div class="modal-body">
+              <div>
+                <div class="col-md-3">
+                  Name:
+                </div>
+                <div class="col-md-8">
+                  <input type="text" ng-model="subCategory.name">
+                </div>
+              </div>
+            </div>
+            <br>
+            <br>
+
+            <div class="modal-footer">
+              <button class="btn btn-success btn-sm" ng-click="updateSubCategory()" data-dismiss="modal">
+                <span class="glyphicon glyphicon-check"></span> Save
+              </button>
+              <button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-trash"></span> Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+<!-- </div> -->

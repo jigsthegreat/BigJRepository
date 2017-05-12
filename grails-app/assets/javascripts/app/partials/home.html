@@ -1,0 +1,161 @@
+<!-- <div class="container div-main" ng-if="!isUser">
+  <div class="well">
+    <p>ADMIN will verify your account in a short while. </p>
+  </div>
+</div> -->
+<toaster-container toaster-options="{'time-out': 3000, 'close-button':true, 'animation-class': 'toast-top-right'}"></toaster-container>
+<div class="container div-main">
+  <div class="container-fluid">
+    <div class="row" >
+      <div class="row content" >
+        <div class="col-md-3 col-sm-6" ng-show="isAdmin()">
+          <div class="panel-heading">USERS</div>
+          <div class="panel fixed-panel panel-default">
+            <div class="notif-panel panel-body">
+              <table>
+                <tr ng-repeat="user in users">
+                  <!--<td>&nbsp</td>-->
+                  <!-- <td>&nbsp</td> -->
+                  <td>
+                    <button class="btn btn-home" ng-if="isAdmin()" mwl-confirm title="Remove" message="Do you really want to remove this user?" confirm-text=" <span class='glyphicon glyphicon-ok'></span> Yes" cancel-text="<span class='glyphicon glyphicon-remove'></span> No" placement="bottom"
+                      on-confirm="deleteUser(user)" on-cancel="cancelClicked = true" confirm-button-type="primary" cancel-button-type="danger">
+                      <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                  </td>
+                  <td>&nbsp</td>
+                  <td>
+                    <!-- <button class="btn btn-home" ng-if="isAdmin()" title="Edit" ui-sref="edit-user({id:user.id})">
+                                            <span class="glyphicon glyphicon-check"></span>
+                                        </button> -->
+                    <!-- <button class="btn btn-home" ng-if="isAdmin()" title="Edit" data-toggle="modal" data-target="#myModalEditUser" ng-click="clickModal(user)" data-dismiss="modal"><span class="glyphicon glyphicon-check"></span></button> -->
+
+                  </td>
+                  <!-- <td>|</td> -->
+                  <td>
+                    &nbsp{{ user.firstName }} {{ user.lastName }}
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-5 col-sm-6">
+          <div class="panel-heading">PURCHASE ORDERS</div>
+          <div class="panel fixed-panel-tall panel-default">
+            <div class="notif-panel panel-body">
+              <!-- <p>Donec ultricies id arcu eu.</p> -->
+              <div ng-repeat="transaction in transactions | filter:{ branch: { id: branch } }">
+                <div ng-if="transaction.dateReceived == null">
+                  <a ui-sref="purchase-order-transaction({id: transaction.id})">Purchase Order #{{ transaction.id }}</a>
+                   is expected to arrive <strong>{{ formatDate(transaction.dateToReceive) }} ({{transaction.dateToReceive | date:'fullDate'}})</strong> from <strong>{{ transaction.supplier.name }}</strong>
+                </div>
+                <div ng-if="transaction.dateReceived != null">
+                  <a ui-sref="purchase-order-transaction({id: transaction.id})">Purchase Order #{{ transaction.id }}</a> is already received <strong>{{ formatDate(transaction.dateReceived) }}</strong><small> ({{transaction.dateReceived | date:'fullDate'}})</small>
+                </div>
+                <hr>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <div class="panel-heading">INVENTORY NOTIFICATIONS</div>
+          <div class="panel fixed-panel-tall panel-default">
+            <div class="notif-panel panel-body">
+              <div ng-repeat="notification in notifications">
+                <span ng-if="notification.branch == null">
+                  <strong>{{ notification.user.firstName }} {{ notification.user.lastName }}</strong> <strong>(ADMIN)</strong> {{ notification.content }} <small><u>({{ notification.dateCreated | date: 'medium'}})</u></small>
+                </span>
+                <span ng-if="notification.branch != null">
+                  <strong>{{ notification.user.firstName }} {{ notification.user.lastName }}</strong> of branch <strong>{{ notification.branch.name }}</strong> {{ notification.content }} <small><u>{{ notification.dateCreated | date: 'medium'}}</u></small>
+                </span>
+                <hr>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+    <div class="col-md-8 col-sm-6" ng-show="isAdmin()">
+        <div class="panel-heading">USER REQUESTS</div>
+          <div class="panel fixed-panel panel-default">
+            <div class="notif-panel panel-body">
+              <table>
+                <tr>
+                  <th>name</th>
+                  <th></th>
+                  <th>Branch</th>
+                </tr>
+                <tr ng-repeat="user in nonUsers">
+                  <td>{{ user.firstName }} {{ user.lastName }}</td>
+                  <td> &nbsp &nbsp</td>
+                  <td>{{ user.requested_role.authority }}</td>
+                  <td>&nbsp</td>
+                  <td>
+                    <button class="btn btn-info" title="Grant Access" ng-if="isAdmin()" mwl-confirm message="Do you want this user to access a branch?" confirm-text="<span class='glyphicon glyphicon-ok'></span> Yes" cancel-text="<span class='glyphicon glyphicon-remove'></span> No"
+                      placement="top" on-confirm="changeStatus(user.id)" on-cancel="cancelClicked = true" confirm-button-type="primary" cancel-button-type="danger">
+                      <span class="glyphicon glyphicon-ok"></span> Grant Access
+                    </button>
+                    <button class="btn btn-danger" title="Grant Access" ng-if="isAdmin()" mwl-confirm message="Do you want to remove this?" confirm-text="<span class='glyphicon glyphicon-ok'></span> Yes" cancel-text="<span class='glyphicon glyphicon-remove'></span> No"
+                      placement="top" on-confirm="deleteUser(user)" on-cancel="cancelClicked = true" confirm-button-type="primary" cancel-button-type="danger">
+                      <span class="glyphicon glyphicon-remove"></span> Deny Request
+                    </button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="myModalEditUser" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Update an Account</h3>
+      </div>
+      <div class="modal-body">
+        <div class="jumbotron vertical-center container-fluid">
+          <div class="row">
+            <div class="col-xs-8 col-sm-6">
+              First Name:
+              <input type="text" class="form-control" placeholder="First Name" ng-model="editUser.firstName">
+            </div>
+            <div class="col-xs-4 col-sm-6">
+              Last Name:
+              <input type="text" class="form-control" placeholder="Last Name" ng-model="editUser.lastName">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              Username:
+              <input type="text" placeholder="Username" class="form-control" ng-model="editUser.username" />
+            </div>
+          </div>
+          <!-- <div class="row">
+                <div class="col-sm-12">
+                    Password: <input type="password" placeholder="Password" class="form-control" ng-model="editUser.password"/>
+                </div>
+            </div> -->
+          <div>
+            <!-- <label ng-repeat="branch in branches">
+                  <input type="radio" ng-model="$parent.selected" value="{{branch.id}}" ng-change="onChange(branch)"> {{ branch.name }}
+                </label> -->
+            <select ng-model="formInfo.branch" class="form-control">
+              <option ng-repeat="branch in branches" value="{{branch.id}}">{{ branch.name }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="form-group">
+          <button type="submit" class="form-control btn btn-primary" ng-click="saveUpdate()" data-dismiss="modal">Update
+          </button>
+        </div>
+        <button class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Close</button>
+      </div>
+    </div>
+  </div>
+</div>

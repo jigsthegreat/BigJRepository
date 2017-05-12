@@ -1,0 +1,11 @@
+<div style="margin-top:6em">
+    <div class="col-md-3">
+        <input type="text" ng-model="subCategory.name">
+        <select ng-model="subCategory.category.id" class="form-control input-sm">
+            <option ng-repeat="item in categories" value="{{ item.id}}">
+                {{ item.name }}
+            </option>
+        </select>
+        <button class="btn btn-default btn-sm" ng-click="update()">UPDATE</button>
+    </div>
+</div>

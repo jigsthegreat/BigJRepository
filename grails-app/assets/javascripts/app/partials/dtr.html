@@ -1,0 +1,536 @@
+<toaster-container
+        toaster-options="{'time-out': 3000, 'close-button':true, 'animation-class': 'toast-top-right'}"></toaster-container>
+<div class="container div-main">
+
+    <!-- <div class="container div-main"> -->
+    <div class="tabs-left">
+        <div class="col-md-3 col-sm-6">
+            <ul class="nav nav-pills nav-stacked">
+                <li ng-class="getTabClass(1)" ng-click="setActiveTab(1)"><a>Employees</a></li>
+                <li ng-class="getTabClass(2)" ng-click="setActiveTab(2)"><a>DTR</a></li>
+                <!--<a href="" ui-sref="attendance"-->
+                <!--data-toggle="tab"></a>-->
+            </ul>
+        </div>
+
+        <div class="col-md-9 col-sm-6">
+            <div class="tab-content">
+                <div ng-class="getTabPaneClass(1)" id="deal">
+                    <div class="container-fluid">
+                        <h2>EMPLOYEES</h2>
+                        <hr>
+                        <div class="mainTable col-lg-12 ">
+                            <table st-table="displayedCollection" st-safe-src="employees"
+                                   class="table table-striped table-hover">
+                                <tbody>
+                                <tr>
+                                    <th colspan="4">
+                                        <input st-search="lastName" class="form-control" placeholder="Employee">
+                                    </th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <!-- <th></th> -->
+                                    <th st-sort="lastName">Last Name</th>
+                                    <th st-sort="firstName">First Name</th>
+                                    <th st-sort="salaryRate">Salary Rate</th>
+                                    <th st-sort="branch.name">Branch</th>
+                                    <th>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                data-target="#myModalAdd" ng-if="accessAllowed()"> Add Employee
+                                        </button>
+                                    </th>
+                                    <th></th>
+                                </tr>
+                                <tr ng-repeat="employee in displayedCollection |filter:{ branch: { id: branch } }">
+                                    <td>
+                                        <a href="" data-toggle="modal" data-target="#myModalProfile"
+                                           ng-click="showModal(employee.id)">
+                                            <span>{{employee.lastName}}</span>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="" data-toggle="modal" data-target="#myModalProfile"
+                                           ng-click="showModal(employee.id)">
+                                            <span>{{employee.firstName}}</span>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <span>{{employee.salaryRate}}</span>
+                                    </td>
+                                    <td>
+                                        {{ employee.branch.name }}
+                                    </td>
+                                    <td>
+                                        <button type="button" class='btn btn-success' data-toggle="modal"
+                                                data-target="#myModalEdit" name="edit" ng-click="select(employee)"
+                                                ng-if="accessAllowed()">
+                                            <span class="glyphicon glyphicon-check"></span> Update
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class='btn btn-danger' name="delete"
+                                                mwl-confirm title="Remove"
+                                                message="Do you want to remove this employee?"
+                                                confirm-text="<span class='glyphicon glyphicon-ok'></span> Yes"
+                                                cancel-text="<span class='glyphicon glyphicon-remove'></span> No"
+                                                placement="top" on-confirm="delete(employee)"
+                                                on-cancel="cancelClicked = true" confirm-button-type="primary"
+                                                cancel-button-type="danger" cancel-button-type="default"
+                                                ng-if="accessAllowed()">
+                                            <span class="glyphicon glyphicon-remove"></span> Remove
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="5" class="text-center">
+                                        <div st-pagination="" st-items-by-page="5" st-displayed-pages="5"></div>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <!--</div>-->
+
+                    <!--Add Employee Modal-->
+
+                    <div class="modal fade" id="myModalAdd" role="dialog">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Add Employee</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="padding">
+                                        <div class="col-md-3">
+                                            First Name:
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input class="form-control" placeholder="First Name"
+                                                   ng-model="formInfo.firstName">
+                                        </div>
+                                    </div>
+                                    <div class="padding">
+                                        <div class="col-md-3">
+                                            Middle Name:
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input class="form-control" placeholder="Middle Name"
+                                                   ng-model="formInfo.middleName">
+                                        </div>
+                                    </div>
+                                    <div class="padding">
+                                        <div class="col-md-3">
+                                            Last Name:
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input class="form-control" placeholder="Last Name"
+                                                   ng-model="formInfo.lastName">
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                    <div class="padding">
+                                        <div class="col-md-3">
+                                            Birth Date:
+                                        </div>
+                                        <div class="col-md-8">
+                                            <p class="input-group">
+                                                <input type="text" class="form-control" datepicker-popup={{format}}
+                                                       ng-model="formInfo.birthdate"
+                                                       max-date=maximumDate is-open="calendar.opened" close-text="Close"
+                                                       class="form-control">
+                                                <span class="input-group-btn">
+									            <button type="button" class="btn btn-default" ng-click="open($event)"><i
+                                                        class="glyphicon glyphicon-calendar"></i></button>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="padding">
+                                        <div class="col-md-3">
+                                            Contact Number:
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input class="form-control" placeholder="Contact Number"
+                                                   ng-model="formInfo.contactNumber">
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                    <div class="padding">
+                                        <div class="col-md-3">
+                                            Address:
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input class="form-control" placeholder="Address"
+                                                   ng-model="formInfo.address">
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                    <div class="padding">
+                                        <div class="col-md-3">
+                                            Salary Rate:
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="number" class="form-control" placeholder="Salary Rate"
+                                                   ng-model="formInfo.salaryRate">
+                                        </div>
+                                    </div>
+                                    <div class="padding" ng-show="all">
+                                        <div class="col-md-3">
+                                            Branch:
+                                        </div>
+                                        <div class="col-md-8">
+                                            <typeahead-dropdown style='width:300px' ng-model='formInfo.branch'
+                                                                options='branches'></typeahead-dropdown>
+                                            Branch: {{formInfo.branch.name}}
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <br>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class='btn btn-success' ng-click="create()" name="save"
+                                            data-dismiss="modal"><span class="glyphicon glyphicon-ok"></span> Submit
+                                        <button class="btn btn-danger" data-dismiss="modal"><span
+                                                class="glyphicon glyphicon-remove"></span> Close
+                                        </button>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Edit Employee modal-->
+
+                    <div class="modal fade" id="myModalEdit" role="dialog">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Edit Employee</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="padding">
+                                        <div class="col-md-3">
+                                            First Name:
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" placeholder="First Name" class="form-control"
+                                                   ng-model="selectedEmployee.firstName"/>
+                                        </div>
+                                    </div>
+                                    <div class="padding">
+                                        <div class="col-md-3">
+                                            Middle Name:
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" placeholder="Middle Name" class="form-control"
+                                                   ng-model="selectedEmployee.middleName"/>
+                                        </div>
+                                    </div>
+                                    <div class="padding">
+                                        <div class="col-md-3">
+                                            Last Name:
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" placeholder="Last Name" class="form-control"
+                                                   ng-model="selectedEmployee.lastName"/>
+                                        </div>
+                                    </div>
+                                    <div class="padding">
+                                        <div class="col-md-3">
+                                            Birth Date:
+                                        </div>
+                                        <div class="col-md-8">
+                                            <p class="input-group">
+                                                <input type="text" class="form-control" datepicker-popup={{format}}
+                                                       ng-model="selectedEmployee.birthdate"
+                                                       max-date=maximumDate is-open="calendar.opened" close-text="Close"
+                                                       class="form-control">
+                                                <span class="input-group-btn">
+									            <button type="button" class="btn btn-default" ng-click="open($event)"><i
+                                                        class="glyphicon glyphicon-calendar"></i></button>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="padding">
+                                        <div class="col-md-3">
+                                            Contact Number:
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" placeholder="Contact Number" class="form-control"
+                                                   ng-model="selectedEmployee.contactNumber"/>
+                                        </div>
+                                    </div>
+                                    <div class="padding">
+                                        <div class="col-md-3">
+                                            Address:
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" placeholder="Contact Number" class="form-control"
+                                                   ng-model="selectedEmployee.address"/>
+                                        </div>
+                                    </div>
+                                    <div class="padding">
+                                        <div class="col-md-3">
+                                            Salary Rate:
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" placeholder="Salary Rate" class="form-control"
+                                                   ng-model="selectedEmployee.salaryRate"/>
+                                        </div>
+                                    </div>
+                                    <div class="padding">
+                                        <div class="col-md-3">
+                                            Branch: {{ selectedEmployee.branch.name }}(current)
+                                        </div>
+                                        <div class="col-md-8">
+                                            <typeahead-dropdown style='width:300px' ng-model="newBranch"
+                                                                options='branches'></typeahead-dropdown>
+                                            Branch: {{newBranch.name}}
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <br>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-success" ng-click="update()"
+                                            data-dismiss="modal"><span class="glyphicon glyphicon-check"></span> Save
+                                        <button class="btn btn-danger" data-dismiss="modal"><span
+                                                class="glyphicon glyphicon-remove"></span> Close
+                                        </button>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--DTR-->
+
+                <div ng-class="getTabPaneClass(2)" id="bond">
+                    <div class="container fluid">
+                        <h2>ATTENDANCE</h2>
+                        <hr>
+
+                        <div class="mainTable col-lg-9">
+                            <tr>
+                                <div class="form-group">
+                                    <p class="input-group">
+                                        <input type="text" class="form-control" datepicker-popup={{format}}
+                                               ng-model="data.dateDropDownInput"
+                                               max-date=maximumDate is-open="calendar.opened" close-text="Close"
+                                               class="form-control">
+                                        <span class="input-group-btn">
+									            <button type="button" class="btn btn-default" ng-click="open($event)"><i
+                                                        class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                    </p>
+
+                                    <div class="dropdown col-md-4">
+                                        <b> Date: </b>{{ data.dateDropDownInput | date:'fullDate' }}
+                                    </div>
+
+                                </div>
+                                <hr>
+                            </tr>
+
+                        </div>
+                    </div>
+
+                    <!--first layout-->
+
+                    <div>
+                        <div class="mainTable col-md-12 col-md-offset-0">
+                            <table st-table="displayedCollection" st-safe-src="employees"
+                                   class="table table-striped table-hover">
+                                <tbody>
+                                <tr>
+                                    <th colspan="4">
+                                        <input st-search="" class="form-control" placeholder="Employee's name">
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th st-sort="name" style="width:20%">First Name</th>
+                                    <th st-sort="name" style="width:20%">Last Name</th>
+                                    <th st-sort="name" style="width:30%">Attendance</th>
+                                </tr>
+                                <tr ng-repeat="employee in displayedCollection | filter:{ branch: { id: branch } }">
+                                    <td>
+                                        <span>{{employee.lastName}}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{employee.firstName}}</span>
+                                    </td>
+                                    <td>
+                                        <div ng-if="isAttendanceExist(employee)">
+                                            <span ng-if="!findAttendance(employee).isPresent"
+                                                  style="color: red;font-weight: bold">Absent</span>
+                                            <span ng-if="findAttendance(employee).isPresent && findAttendance(employee).isWholeDay"
+                                                  style="color: blue;font-weight: bold"> Whole Day</span>
+                                            <span ng-if="findAttendance(employee).isPresent && !findAttendance(employee).isWholeDay"
+                                                  style="color:lightskyblue;font-weight: bold">Half Day</span>
+                                            <button type="button" class="form-control btn btn-success"
+                                                    class='btn btn-success' ng-if="accessAllowed()"
+                                                    ng-click="edit(findAttendance(employee))" data-toggle="modal"
+                                                    data-target="#myModalEditAttendance">
+                                                Edit Attendance
+                                            </button>
+                                        </div>
+                                        <form role="form" ng-if="!isAttendanceExist(employee) && accessAllowed()"
+                                              ng-init="newAttendances[employee.id].status='absent'">
+                                            <label class="radio-inline">
+                                                <input type="radio" name="optradio"
+                                                       ng-model="newAttendances[employee.id].status" value="true"/>
+                                                Whole Day
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="optradio"
+                                                       ng-model="newAttendances[employee.id].status" value="false"/>
+                                                Half Day
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="optradio"
+                                                       ng-model="newAttendances[employee.id].status" value="absent"/>
+                                                Absent
+                                            </label>
+                                        </form>
+                                    </td>
+                                </tr>
+                                </tbody>
+
+                            </table>
+
+                            <button class="btn btn-success pull-right"
+                                    ng-click="saveAttendances()" ng-if="accessAllowed() && newAttendancesSize()!= 0">
+                                <span class="glyphicon glyphicon-check"></span> Save
+                            </button>
+
+                        </div>
+                        <!--edit attendance modal-->
+
+                        <div class="modal fade" id="myModalEditAttendance" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"
+                                                ng-click="edit(oneProduct.id)">&times;</button>
+                                        <h4 class="modal-title">Edit Attendance</h4>
+                                    </div>
+
+
+                                    <div class="modal-body">
+                                        <div class="padding">
+                                            <div class="container div-main">
+                                                <div>
+                                                    <br> {{oneAttendance.date | date:"medium"}}:
+                                                </div>
+                                                <div class="col-md-3">
+                                                    Attendance:
+                                                    <select ng-model="selectedAttendance.type" class="form-control">
+                                                        <option value="absent">Absent</option>
+                                                        <option value="true">Whole Day</option>
+                                                        <option value="false">Half Day</option>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="submit" class="form-control btn btn-primary"
+                                                ng-click="updateAttendance()"><span
+                                                class="glyphicon glyphicon-check" data-dismiss="modal"></span> Update
+                                            <button class="btn btn-danger" data-dismiss="modal"> Close</button>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!--end of first layout-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--display of Employee Profile-->
+<div class="modal fade" id="myModalProfile" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div class="row">
+                    <div class="col-md-10">
+                        <h3 class="modal-title"> {{oneEmployee.firstName}} {{oneEmployee.middleName}}
+                            {{oneEmployee.lastName}}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <h4>Birth Date:</h4>
+                    </div>
+                    <div class="col-md-8">
+                        <h4>{{oneEmployee.birthdate | date: "MMM dd,yyyy"}}</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h4>Contact Number:</h4>
+                    </div>
+                    <div class="col-md-8">
+                        <h4>{{oneEmployee.contactNumber}}</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h4>Address:</h4>
+                    </div>
+                    <div class="col-md-8">
+                        <h4>{{oneEmployee.address}}</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h4>Salary Rate:</h4>
+                    </div>
+                    <div class="col-md-8">
+                        <h4>{{oneEmployee.salaryRate}}</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h4>Branch:</h4>
+                    </div>
+                    <div class="col-md-8">
+                        <h4>{{oneEmployee.branch.name}}</h4>
+                    </div>
+                </div>
+
+            </div>
+            <br>
+            <br>
+
+            <div class="modal-footer">
+                <button class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span>
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

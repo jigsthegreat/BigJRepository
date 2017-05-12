@@ -1,0 +1,38 @@
+<div class="signin container div-main">
+  <div class="col-md-6 col-md-offset-3">
+    <h3>Sign in to access the page</h3>
+      <div class="jumbotron vertical-center container-fluid">
+        <img class="imglogosquare" src="../BigJRepository/images/square.png">
+        <form name="userForm" ng-submit="submitForm()" novalidate>
+          
+          <div class="form-group has-warning has-feedback"  ng-class="{ 'has-error' : userForm.uname.$invalid && !userForm.uname.$pristine }">
+            <input type="text" placeholder="username" class="form-control" ng-model="username" name="uname" required/>
+            <span ng-show="userForm.uname.$invalid && !userForm.uname.$pristine" class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span>
+            <span id="inputWarning2Status" class="sr-only">(warning)</span>
+          </div>
+
+          <div class="form-group has-warning has-feedback" ng-class="{ 'has-error' : userForm.pword.$invalid && !userForm.pword.$pristine }">
+            <input type="password" placeholder="password" class="form-control" ng-model="password" name="pword" required/>
+            <span ng-show="userForm.pword.$invalid && !userForm.pword.$pristine" class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span>
+            <span id="inputWarning2Status" class="sr-only">(warning)</span>
+          </div>
+
+          <toaster-container toaster-options="{'time-out': 3000, 'close-button':true, 'animation-class': 'toast-top-center'}"></toaster-container>
+
+          <div class="form-group pull-right">
+            <button type="submit" class="btn btn-primary" ng-click="login()" ng-disabled="userForm.$invalid">Sign In</button>
+          </div>
+          
+        </form>
+    </div>
+      <a href="#" ui-sref="signup">Create an account</a>
+  </div>
+</div>
+
+
+  <!--     <div>
+        <label ng-repeat="branch in branches">
+          <input type="radio" ng-model="$parent.selected" value="{{branch.id}}" ng-change="onChange(branch)"> {{ branch.name }}
+        </label>
+
+      </div> -->

@@ -1,0 +1,127 @@
+<div class="container div-main">
+  <div class="row">
+    <div class="col-md-4">
+                <!-- <select ng-model="client" class="form-control">
+              <option ng-repeat="client in clients" value="{{client.id}}">{{ client.name }}</option>
+            </select> -->
+      <div class="jumbotron vertical-center container-fluid">
+        <h2>Add Pricelist Transaction </h2>
+        <hr>
+        <!-- <form class="form-horizontal" role="form"> -->
+          <!-- <div class="form-group">
+            <input autocomplete="off" name="clients" id="clients" value="{{client.id}}" type="text" placeholder="Enter Client" ng-model="client"
+                     typeahead="client as client.name for client in clients |filter:{name: $viewValue}" class="form-control">
+          </div> -->
+          <p>Select Client</p>
+  <p>
+    <typeahead-dropdown style='width:300px' ng-model='selectedOption' options='clients'></typeahead-dropdown>
+    Name: {{selectedOption.name}} address: {{selectedOption.address}}
+  </p>
+          <div class="form-group pull-right">
+            <button class="btn btn-primary" ng-click="add()">
+              Submit
+            </button>
+          </div>
+        <!-- </form> -->
+      </div>
+    </div>
+
+    <div class="col-md-8">
+      <!-- <div>
+        TRANSACTION NUMBER: {{ transaction.id }}
+        <input type="hidden" ng-model="transaction.id">
+      </div> -->
+      <div ng-hide="transaction == null">
+        <div>
+          <h2>Pricelist details</h2>
+          <table class="table table-bordered table-hover table-condensed">
+            <tr style="font-weight: bold">
+              <td>Photo</td>
+              <td style="width:15%">Product Name</td>
+              <td style="width:15%">Stock Number</td>
+              <td style="width:15%">Unit Price</td>
+              <td style="width:15%">Price</td>
+              <td style="width:25%">
+                <button data-toggle="modal" data-target="#modalAddProduct" data-dismiss="modal" class="btn btn-primary"><span class="glyphicon glyphicon-check"></span> Add Product</button>
+              </td>
+            </tr>
+            <tr ng-repeat="product in products">
+              <td>
+                picture
+              </td>
+              <td>
+                <!-- <span editable-select="product.product" e-name="product" onshow="loadGroups()" e-form="rowform" e-ng-options="g.id as g.id for g in groups"> -->
+      	          	{{ showGroup(product) }}
+      	        <!-- </span> -->
+              </td>
+              <td>
+      	          	{{ product.stockNumber }}
+      	        </span>
+              </td>
+              <td>
+      	          	{{ product.unitPrice | currency:"₱"}}
+      	        </span>
+              </td>
+              <td>
+                <span editable-text="product.price" e-name="price" e-form="rowform" e-required>
+                {{ product.price || 'empty' | currency:"₱" }}
+              </td>
+              <td style="white-space: nowrap">
+                <!-- form -->
+                <form editable-form name="rowform" onbeforesave="saveUser($data, product.id)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == product">
+                  <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
+                    save
+                  </button>
+                  <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default">
+                    cancel
+                  </button>
+                </form>
+                <div class="buttons" ng-show="!rowform.$visible">
+                  <button class="btn btn-primary" ng-click="rowform.$show()">edit</button>
+                  <button class="btn btn-danger" ng-click="removeUser($index, product)">del</button>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="modalAddProduct" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Add Product</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <select class="form-control" ng-model="product" ng-change="selectedItemChanged(product)">
+              <option ng-repeat="product in productss" value="{{product.product.id}}">
+                {{ product.product.name }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group" >
+            Stock Number: <span ng-model="stockNumber">{{ itemInstance.stockNumber }}</span>
+          </div>
+          <div class="form-group" >
+            <!-- {{ itemInstance.quantity }} -->
+            Unit Price: <span ng-model="unitPrice">{{ itemInstance.product.price }}</span>
+            <!-- <input type="text" ng-model="unitPrice" class="form-control" placeholder="Unit Price"> -->
+          </div>
+          <div class="form-group">
+            <input type="text" ng-model="price" class="form-control" placeholder="Price">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-toggle="modal" ng-click="addUser()" data-dismiss="modal">
+            <i class="glyphicon glyphicon-check">Add</i>
+          </button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

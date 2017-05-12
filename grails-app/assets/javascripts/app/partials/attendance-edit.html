@@ -1,0 +1,17 @@
+<div style="margin-top:6em">
+    <div class="container div-main">
+        <div>
+            {{getEmployee(employeeId).firstName}}<br>
+            {{getAttendance(selectedId).date}}:
+        </div>
+        <div class="col-md-3">
+            Attendance:
+            <select ng-model="selectedAttendance.type" class="form-control">
+                <option value="absent">Absent</option>
+                <option value="true">Whole Day</option>
+                <option value="false">Half Day</option>
+            </select>
+            <button type="submit" class="form-control btn btn-primary" ng-click="updateAttendance()">UPDATE</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,222 @@
+<div class="container div-main">
+  <h2>Warehouse</h2>
+  <!-- <hr> -->
+  {{ accessAllowed() }}
+  <div class="col-md-12">
+    <div class="storage">
+      <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped table-hover">
+          <tr>
+            <th colspan="2">
+              <select ng-model="searchBy" class="form-control">
+                <option value="" selected>Global Search</option>
+                <option value="product.name">Name</option>
+                <option value="product.size">Size</option>
+                <option value="product.color">Color</option>
+                <option value="branch.name">Branch</option>
+                <option value="stockNumber">Stock Number</option>
+                <option value="unit">Unit</option>
+                <option value="quantity">Quantity</option>
+                <option value="product.price">Unit Price</option>
+                <option value="supplier.name">Supplier</option>
+              </select>
+            </th>
+            <th colspan="4">
+                <input st-search="{{searchBy}}" class="form-control" placeholder="Input text">
+            </th>
+          </tr>
+          <tr>
+            <th>Photo</th>
+            <th st-sort="product.name">Item Name</th>
+            <th st-sort="product.size">Size</th>
+            <th st-sort="product.color">Color</th>
+            <th st-sort="branch.name">Branch</th>
+            <th st-sort="stockNumber">Stock Number</th>
+            <th st-sort="unit">Unit</th>
+            <th st-sort="quantity">Quantity</th>
+            <th st-sort="product.price">Price(per unit)</th>
+            <th st-sort="supplier.name">Supplier</th>
+            <th>Update</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="row in displayedCollection | filter:{ branch: { id: branch } }">
+            <td>
+              <div ng-if="row.product.photo_extension != null">
+                <img ng-src="../BigJRepository/images/{{row.product.id}}.{{row.product.photo_extension}}" width="100">
+              </div>
+              <div ng-if="row.product.photo_extension == null">
+                <img ng-src="../BigJRepository/images/default.jpg" width="100">
+              </div>
+            </td>
+            <td>
+              {{row.product.name}}
+            </td>
+            <td>
+              {{row.product.size}}
+            </td>
+            <td>
+              {{row.product.color}}
+            </td>
+            <td>
+              {{row.branch.name}}
+            </td>
+            <td>
+              {{row.stockNumber}}
+            </td>
+            <td>
+              {{row.unit}}
+            </td>
+            <td>
+              {{row.quantity}}
+            </td>
+            <td>
+              {{row.product.price | currency: "₱"}}
+            </td>
+            <td>
+              {{row.supplier.name}}
+            </td>
+            <td>
+              <!-- <span ng-if="accessAllowed()"><input type="button" class="form-control" value="Update"/> </span> -->
+              <div class="form-group">
+                <button type="button" ng-if="accessAllowed()" class="btn btn-info form-control" data-toggle="modal" data-target="#myModalComingIn" data-dismiss="modal" ng-click="showModal(row)"><span class="glyphicon glyphicon-circle-arrow-up"></span> Coming In</button>
+              </div>
+              <div class="form-group">
+                <button type="button" ng-if="accessAllowed()" class="btn btn-info form-control" data-toggle="modal" data-target="#myModalComingOut" ng-click="showModal(row)"><span class="glyphicon glyphicon-circle-arrow-down"></span> Coming Out</button>
+              </div>
+              <!-- <div class="form-group">
+                <button class="btn btn-success" ng-click="" ng-if="accessAllowed()"><span class="glyphicon glyphicon-check"></span> Update</button>
+              </div> -->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="modal-size modal fade" id="myModalComingIn" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h3> How many products will come in? </h3>
+      </div>
+      <div class="modal-body">
+        <div class="padding">
+          <div class="col-md-2">
+            Quantity:
+          </div>
+          <div class="col-md-8">
+            <input type="number" class="form-control" ng-model="addedQuantity" />
+          </div>
+        </div>
+        <br>
+        <div class="well">
+          <div>
+            Name: {{ row.product.name }}
+          </div>
+          <div>
+            Unit: {{ row.unit }}
+          </div>
+          <div>
+            Current Quantity in the storage: {{ row.quantity }}
+          </div>
+        </div>
+       <!--  <div class="padding">
+          Current Quantity in the storage: {{ row.quantity }}
+        </div> -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-toggle="modal" mwl-confirm title="Add to Storage" message="Do you want to add this quantity in the Storage?" confirm-text="<span class='glyphicon glyphicon-ok'></span> Yes" cancel-text="<span class='glyphicon glyphicon-remove'></span> No"
+          placement="bottom" on-confirm="comingIn()" on-cancel="cancelClicked = true" confirm-button-type="info" cancel-button-type="default">
+          <span class="glyphicon glyphicon-ok"></span> Submit
+        </button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="myModalComingOut" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h3> How many products will come out? </h3>
+      </div>
+      <div class="modal-body">
+        <div class="padding">
+          <div class="col-md-2">
+            Quantity:
+          </div>
+          <div class="col-md-8">
+            <input type="number" class="form-control" ng-model="minusQuantity" />
+          </div>
+        </div>
+        <br>
+        <div class="well">
+          <div>
+            Name: {{ row.product.name }}
+          </div>
+          <div>
+            Unit: {{ row.unit }}
+          </div>
+          <div>
+            Current Quantity in the storage: {{ row.quantity }}
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-toggle="modal" mwl-confirm title="Add to Storage" message="Do you want to deduct this quantity in the Storage?" confirm-text="<span class='glyphicon glyphicon-ok'></span>" cancel-text="<span class='glyphicon glyphicon-remove'></span> No"
+          placement="bottom" on-confirm="comingOut()" on-cancel="cancelClicked = true" confirm-button-type="info" cancel-button-type="default">
+          <span class="glyphicon glyphicon-ok"></span> Submit
+        </button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="myModalEdit" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h3> Edit this item: </h3>
+      </div>
+      <div class="modal-body">
+        <div class="padding">
+          <div class="col-md-2">
+            Quantity:
+          </div>
+          <div class="col-md-8">
+            <input type="number" class="form-control" ng-model="minusQuantity" />
+          </div>
+        </div>
+        <br>
+        <div class="well">
+          <div>
+            Name: {{ row.product.name }}
+          </div>
+          <div>
+            Unit: {{ row.unit }}
+          </div>
+          <div>
+            Current Quantity in the storage: {{ row.quantity }}
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-toggle="modal" mwl-confirm title="Add to Storage" message="Do you want to deduct this quantity in the Storage?" confirm-text="<span class='glyphicon glyphicon-ok'></span>" cancel-text="<span class='glyphicon glyphicon-remove'></span> No"
+          placement="bottom" on-confirm="comingOut()" on-cancel="cancelClicked = true" confirm-button-type="info" cancel-button-type="default">
+          <span class="glyphicon glyphicon-ok"></span> Submit
+        </button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<toaster-container toaster-options="{'time-out': 3000, 'close-button':true, 'animation-class': 'toast-top-right'}"></toaster-container>

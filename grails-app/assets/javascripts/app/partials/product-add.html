@@ -1,0 +1,103 @@
+<div class="container div-main">
+  <div class="container-fluid">
+    <h2>Product Inventory</h2>
+    <hr>
+    <div class="col-md-6">
+      <div class="form-group">
+        Product Name:
+        <input class="form-control" id="inputItemName" placeholder="Item Name" ng-model="formInfo.itemName">
+      </div>
+      <div class="form-group">
+        Description:
+        <textarea class="form-control" id="inputDescription" placeholder="Description" ng-model="formInfo.description">
+        </textarea>
+      </div>
+      <div class="form-group">
+        Color:
+        <input class="form-control" id="inputColor" placeholder="Color" ng-model="formInfo.color">
+      </div>
+      <div class="form-group">
+        Size:
+        <input class="form-control" id="inputSize" placeholder="Size" ng-model="formInfo.size">
+      </div>
+      <div class="form-group">
+        Unit Price:
+        <input type="number" class="form-control" id="inputPrice" placeholder="Unit Price" ng-model="formInfo.price">
+      </div>
+      <div class="form-group">
+        Selling Price:
+        <input type="number" class="form-control" id="inputPrice" placeholder="Selling Price" ng-model="formInfo.sellingprice">
+      </div>
+      <div class="form-group">
+        Wholesale Price:
+        <input type="number" class="form-control" id="inputPrice" placeholder="Wholesale Price" ng-model="formInfo.wholesaleprice">
+      </div>
+      <div class="form-group">
+        Sub Category
+        <!-- <input type="number" class="form-control" id="inputPrice" placeholder="Price" ng-model="formInfo.price"> -->
+        <select ng-model="formInfo.subCategory" class="form-control input-sm">
+          <option ng-repeat="item in subCategories" value="{{ item.id}}">
+            {{ item.name }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        Image:
+        <form ng-app="fileUpload" name="form">
+          <td>
+            <input class="form-control" type="file" ngf-select ng-model="file" name="file" ngf-pattern="'image/*'" accept="image/*" ngf-max-size="20MB" ngf-min-height="100" ngf-resize="{width: 100, height: 100}" class="btn btn-default submit_photo">
+            <!--<button type="submit" ng-click="submit()">submit</button> -->
+          </td>
+        </form>
+      </div>
+      <div class="form-group">
+          <button ng-disabled="disableButtonAdd" type="button" class='btn btn-primary pull-left' ng-click="add()" name="save"><span class="glyphicon glyphicon-plus"></span> Add Product</button>
+         <!--  <div ng-show="">
+            <button class="btn btn-primary pull-right" ng-click="changeStatus()"><span class="glyphicon glyphicon-plus"></span> Add to Storage
+            </button> -->
+          </div>
+      </div>
+
+    <div class="col-md-6"  ng-show="addSuccess">
+      <div class="form-group" >
+        <h2>Add To Storage</h2>
+          <div class="form-group">
+            Stock Number:
+            <input type="text" class="form-control" placeholder="Stock Number" ng-model="formInfo.stockNumber">
+          </div>
+          <div class="form-group">
+            Unit:
+            <input type="text" class="form-control" placeholder="unit" ng-model="formInfo.unit">
+          </div>
+          <div class="form-group">
+            Quantity:
+            <input type="number" class="form-control" placeholder="Quantity" ng-model="formInfo.quantity">
+          </div>
+          <div class="form-group">
+            Supplier:
+            <p>
+              <typeahead-dropdown style='width:300px' ng-model='selectedOption3' options='suppliers'></typeahead-dropdown>
+              <br>
+              <b> Name: {{selectedOption3.name}}
+              <br> Address: {{selectedOption3.address}} </b>
+            </p>
+          </div>
+          <div class="form-group" ng-show="all">
+            Branch:
+            <br>
+            <p>
+              <typeahead-dropdown style='width:300px' ng-model='selectedOption2' options='branches'></typeahead-dropdown>
+              <b> Branch: {{selectedOption2.name}} </b>
+            </p>
+          </div>
+          <div class="form-group">
+            <button class="btn btn-primary pull-right" mwl-confirm title="Add this to Storage" message="Do you want to add this product in the storage?" confirm-text="<span class='glyphicon glyphicon-ok'></span> Yes" cancel-text="<span class='glyphicon glyphicon-remove'></span> No" placement="top"
+              on-confirm="addToStorage()" on-cancel="cancelClicked = true" confirm-button-type="primary" cancel-button-type="danger"> <span class="glyphicon glyphicon-ok"></span> Submit
+            </button>
+          </div>
+        </div>
+    </div>
+  </div>
+  </div>
+</div>
+<toaster-container toaster-options="{'time-out': 3000, 'close-button':true, 'animation-class': 'toast-top-right'}"></toaster-container>

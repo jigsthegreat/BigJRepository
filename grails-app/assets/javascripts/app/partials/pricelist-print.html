@@ -1,0 +1,90 @@
+<div class="container pricelistprint">
+  <div class="row">
+    <table>
+      <tr>
+        <td> <img src="../BigJRepository/images/ibj.jpg"> </td>
+        <td>
+          <p class="print">ILOILO BIG J's MART CORP.</p>
+          <p class="print3-1"> Branch: {{ one.branch.address }} <br>
+            <span ng-if="one.branch.contactNumber != null">Tel.: {{ one.branch.contactNumber }} </span> <br>
+            <span ng-if="one.branch.faxNumber != null">Fax: {{ one.branch.faxNumber }} </span>
+            <span ng-if="one.branch.email != null">Email: {{ one.branch.email }} </span> <br>
+          </p>
+        </td>
+      </tr>
+    </table>
+      <table>
+      <tr>
+        <th></th>
+        <th></th>
+        <th colspan="5">
+          <h3> DELIVERY RECEIPT </h3> 
+        </th>
+        <th colspan="3"> 
+          {{ one.id }}
+        </th>
+      </tr>
+      <tr>
+        <td>Delivered to:</td>
+        <td>&nbsp&nbsp&nbsp&nbsp&nbsp{{ one.client.name }}</td>
+        <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        </td>
+        <td>Delivered by:</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Address:</td>
+        <td>&nbsp&nbsp&nbsp&nbsp&nbsp{{ one.client.address }}</td>
+        <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
+        <td>Date:</td>
+        <td>&nbsp&nbsp&nbsp&nbsp&nbsp{{ one.dateCreated | date:'fullDate' }}</td>
+      </tr>
+    </table>
+  </div>
+  <br>
+  <div class="row">
+    <table border="2">
+      <tr>
+        <th style="width:5%">QTY.</th>
+        <th style="width:5%">UNIT</th>
+        <th style="width:8%">DESCRIPTION</th>
+        <th style="width:8%">UNIT PRICE</th>
+        <th style="width:8%">AMOUNT</th>
+      </tr>
+      <tr ng-repeat="product in items">
+        <td>
+          {{ product.quantity }}
+        </td>
+        <td>
+          {{ product.unit }}
+        </td>
+        <td>
+          {{ product.product.description }}
+        </td>
+        <td>
+          {{ product.price | currency:"₱" }}
+        </td>
+        <td>
+          {{ product.quantity * product.price | currency:"₱" }}
+        </td>
+      </tr>
+      <tr>
+        <td>&nbsp</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr><tr>
+        <td>&nbsp</td>
+        <td></td>
+        <td></td>
+        <td>Total: </td>
+        <td>{{ getTotal() | currency:"₱"}}</td>
+      </tr>
+    </table>
+    <button ng-click="print()" class="btn btn-default pull-right"><span class="glyphicon glyphicon-print"></span> Print</button>
+  </div>
+</div>
+<span class="cssclsNoPrint">
+  
+</span>

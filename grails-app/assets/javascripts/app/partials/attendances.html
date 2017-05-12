@@ -1,0 +1,26 @@
+<div style="margin-top:6em">
+    <div class="container div-main">
+        <div ng-repeat="employee in employees">
+            <div class="col-md-3">
+                {{employee.firstName}}:
+                <ul>
+                    <li ng-repeat="attendance in employee.attendances">
+                        {{getAttendance(attendance.id).date | date:"medium"}}::
+                        <span ng-if="!getAttendance(attendance.id).isPresent"> Absent</span>
+                        <span ng-if="getAttendance(attendance.id).isPresent && getAttendance(attendance.id).isWholeDay"> Whole Day</span>
+                        <span ng-if="getAttendance(attendance.id).isPresent && !getAttendance(attendance.id).isWholeDay">Half Day</span>
+
+                        <button type="button" class='form-control btn btn-primary'
+                                ui-sref="edit-attendance({employee:employee.id,id:attendance.id})">
+                            Edit Attendance
+                        </button>
+
+                    </li>
+                </ul>
+            </div>
+            <button type="button" class='form-control btn btn-primary' ui-sref="add-attendance({employee:employee.id})">
+                Add Attendance
+            </button>
+        </div>
+    </div>
+</div>

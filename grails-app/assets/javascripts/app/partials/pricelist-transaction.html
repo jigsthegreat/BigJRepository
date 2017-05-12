@@ -1,0 +1,186 @@
+<div class="container div-main">
+	<div class="container-fluid">
+		<p>CUSTOMER's PRICELIST # {{ one.id }}</p>
+		<hr>
+		<div class="well">
+			<table>
+				<tr>
+					<td>
+						<h4> <b> Client Name </b> </h4> </td>
+					<td>
+						<h4> <b> : </b> </h4> </td>
+					<td></td>
+					<td>
+						<h4> {{ one.client.name }} </h4> </td>
+				</tr>
+				<tr>
+					<td>
+						<h4> <b> Contact Number </b> </h4> </td>
+					<td>
+						<h4> <b> : </b> </h4> </td>
+					<td></td>
+					<td>
+						<h4> {{ one.client.contactNumber }} </h4> </td>
+				</tr>
+				<tr>
+					<td>
+						<h4> <b> Address </b> </h4> </td>
+					<td>
+						<h4> <b> : </b> </h4> </td>
+					<td></td>
+					<td>
+						<h4> {{ one.client.address }} </h4> </td>
+				</tr>
+				<tr>
+					<td>
+						<h4> <b> Branch Name </b> </h4> </td>
+					<td>
+						<h4> <b> : </b> </h4> </td>
+					<td></td>
+					<td>
+						<h4> {{ one.branch.name }} </h4> </td>
+				</tr>
+				<tr>
+					<td>
+						<h4> <b> Date Created </b> </h4> </td>
+					<td>
+						<h4> <b> : </b> </h4> </td>
+					<td></td>
+					<td>
+						<h4> {{ one.dateCreated | date:'medium' }} </h4> </td>
+				</tr>
+			</table>
+			<div>
+				<button class="btn btn-print" ui-sref="pricelist-print({id: one.id})" ng-if="accessAllowed()"><span class="glyphicon glyphicon-print"></span> Print</button>
+			</div>
+		</div>
+
+		<table class="table table-bordered table-hover table-condensed" onshow="loadGroups()">
+			<tr style="font-weight: bold">
+				<td style="width:3%"></td>
+				<td style="width:10%">Photo</td>
+				<td style="width:10%">Product Name</td>
+				<td style="width:5%">Quantity</td>
+				<td style="width:10%">Stock Number</td>
+				<td style="width:10%">Selling Price</td>
+				<td style="width:10%">Customer's Price</td>
+				<td style="width:10%">
+					<button data-toggle="modal" data-target="#modalAddProduct" data-dismiss="modal" class="btn btn-primary" ng-if="accessAllowed()"><span class="glyphicon glyphicon-plus"></span> Add Product</button>
+					
+				</td>
+			</tr>
+			<!-- {{ users }} -->
+			<tr ng-repeat="product in products">
+				<td>
+					<input type="checkbox" checklist-model="users" checklist-value="product" ng-click="checkbox()"> <!-- {{product.product.name}} -->
+					
+				</td>
+				<td>
+					<div ng-if="product.product.photo_extension != null">
+	                  <img ng-src="../BigJRepository/images/{{product.product.id}}.{{product.product.photo_extension}}" width="100">
+	                </div>
+	                <div ng-if="product.product.photo_extension == null">
+	                  <img ng-src="../BigJRepository/images/default.jpg" width="100">
+	                </div>
+				</td>
+				<td>
+					<!-- <span editable-select="product.product" e-name="product" onshow="loadGroups()" e-form="rowform" e-ng-options="g.id as g.name for g in groups"> -->
+					{{ product.product.name }}
+					<!-- </span> -->
+				</td>
+				<td>
+					<span editable-text="product.quantity" e-name="quantity" e-form="rowform" e-required> 
+	                  {{ product.quantity }}
+	                </span>
+				</td>
+				<td>
+					{{ product.stockNumber }}
+					</span>
+				</td>
+				<td>
+					{{ product.product.sellingPrice | currency:"₱" }}
+					</span>
+				</td>
+				<td>
+					<span editable-text="product.price" e-name="price" e-form="rowform" e-required>
+                {{ product.price || 'empty' | currency:"₱" }} </span>
+              </td>
+              <td style="white-space: nowrap">
+                <!-- form -->
+                <form editable-form name="rowform" onbeforesave="saveUser($data, product.id)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == product">
+                  <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Save
+					</button>
+					<button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default">
+						cancel
+					</button>
+					</form>
+					<div class="buttons" ng-show="!rowform.$visible">
+						<button class="btn btn-success" ng-click="rowform.$show()" ng-if="accessAllowed()"><span class="glyphicon glyphicon-check"></span> Update</button>
+						<button class="btn btn-danger" ng-if="accessAllowed()"
+						mwl-confirm
+		                  title="Remove"
+		                  message="Do you want to remove this product?"
+		                  confirm-text="<span class='glyphicon glyphicon-ok'></span> Yes"
+		                  cancel-text="<span class='glyphicon glyphicon-remove'></span> No"
+		                  placement="top"
+		                  on-confirm="removeUser($index, product)"
+		                  on-cancel="cancelClicked = true"
+		                  confirm-button-type="info"><span class="glyphicon glyphicon-trash"></span> Remove</button>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="modal fade" id="modalAddProduct" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Add Product</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<select class="form-control" ng-model="wew" ng-change="selectedItemChanged(wew)">
+							<option ng-repeat="product in productss" value="{{product.id}}">
+								{{ product.product.name }}
+							</option>
+						</select>
+					</div>
+					<div class="padding">
+		            	<div class="col-md-3">
+			              Quantity:
+			            </div>
+			            <div class="col-md-8">
+			              <input type="number" ng-model="quantity" class="form-control" placeholder="Quantity">
+			            </div>
+			          </div>
+			          <div class="padding">
+			            <div class="col-md-3">
+			              Unit:
+			            </div>
+			            <div class="col-md-8">
+			              <span ng-model="stockNumber">{{ itemInstance.unit }}</span>
+			            </div>
+			          </div>
+					<div class="form-group">
+						Stock Number: <span ng-model="stockNumber">{{ itemInstance.stockNumber }}</span>
+					</div>
+					<div class="form-group">
+						<!-- {{ itemInstance.quantity }} -->
+						Selling Price: <span ng-model="unitPrice">{{ itemInstance.product.price }}</span>
+						<!-- <input type="text" ng-model="unitPrice" class="form-control" placeholder="Unit Price"> -->
+					</div>
+					<div class="form-group">
+						<input type="number" ng-model="price" class="form-control" placeholder="Customer's Price">
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-toggle="modal" ng-click="addUser()" data-dismiss="modal">
+						<span class="glyphicon glyphicon-ok"></span> Submit
+					</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+<toaster-container toaster-options="{'time-out': 3000, 'close-button':true, 'animation-class': 'toast-top-right'}"></toaster-container>

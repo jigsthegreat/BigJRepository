@@ -1,0 +1,39 @@
+<div style="margin-top:6em">
+
+</div>
+
+<div>
+  <table class="table table-bordered table-hover table-condensed">
+    <tr style="font-weight: bold">
+      <td>Photo</td>
+      <td style="width:15%">Product Name</td>
+      <td style="width:15%">Stock Number</td>
+      <td style="width:15%">Unit Price</td>
+      <td style="width:15%">Price</td>
+    </tr>
+    <tr ng-repeat="product in products">
+      <td>
+        picture
+      </td>
+      <td>
+        <!-- <span editable-select="product.product" e-name="product" onshow="loadGroups()" e-form="rowform" e-ng-options="g.id as g.name for g in groups"> -->
+          	{{ product.product.name }}
+        <!-- </span> -->
+      </td>
+      <td>
+          	{{ product.stockNumber }}
+        </span>
+      </td>
+      <td>
+          	{{ product.product.price | currency:"₱" }}
+        </span>
+      </td>
+      <td>
+        <span editable-text="product.price" e-name="price" e-form="rowform" e-required>
+        {{ product.price || 'empty' | currency:"₱" }}
+      </td>
+    </tr>
+  </table>
+</div>
+
+<button ng-click="print()">CLICK</button>

@@ -1,0 +1,152 @@
+<div class="container div-main">
+  <div class="container-fluid">
+    <h2>CLIENT LIST</h2>
+    <hr>
+    <div class="mainTable col-md-12 col-md-offset-0">
+      <table st-table="displayedCollection" st-safe-src="clients" class="table table-striped table-hover">
+        <tbody>
+          <tr>
+            <th colspan="4">
+              <input st-search="name" class="form-control" placeholder="Client's name">
+            </th>
+          </tr>
+          <tr>
+            <th st-sort="name" style="width:20%">Client Name</th>
+            <th st-sort="name" style="width:20%">Contact Number</th>
+            <th st-sort="name" style="width:30%">Address</th>
+            <th style="width:30%">
+              <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModalAdd"><span class="glyphicon glyphicon-plus"></span> Add Client
+              </button> -->
+              <button type="button" class="btn btn-primary" ui-sref="add-client"><span class="glyphicon glyphicon-plus"></span> Add Client
+              </button>
+            </th>
+          </tr>
+          <tr ng-repeat="row in displayedCollection">
+            <td>
+              <!-- <button ng-click="edit-client({id:row.id})" name="edit" data-toggle="modal" data-target="#myModalEdit" data-dismiss="modal"> <span class="glyphicon glyphicon-check"></span> </button> -->
+              <span>{{row.name}}</span>
+            </td>
+            <td>
+              <span>{{row.contactNumber}}</span>
+            </td>
+            <td>
+              <span>{{row.address}}</span>
+            </td>
+            <td>
+              <button type="button" class='btn btn-success' data-toggle="modal" data-target="#myModalEdit" ng-click="clickUpdate(row)">
+                <span class="glyphicon glyphicon-check"></span> Update
+              </button>
+              <button type="button" class="btn btn-danger"
+              mwl-confirm
+              title="Remove"
+              message="Do you want to remove this client?"
+              confirm-text="<span class='glyphicon glyphicon-ok'></span> Yes"
+              cancel-text="<span class='glyphicon glyphicon-remove'></span> No "
+              placement="top"
+              on-confirm="delete(row)"
+              on-cancel="cancelClicked = true"
+              confirm-button-type="primary"
+              cancel-button-type="danger">
+                <span class="glyphicon glyphicon-trash"></span> Remove </button>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="5" class="text-center">
+              <div st-pagination="" st-items-by-page="10" st-displayed-pages="10"></div>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- <div class="modal fade" id="myModalAdd" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add item</h4>
+      </div>
+      <div class="modal-body">
+        <div class="padding">
+          <div class="col-md-3">
+            Client Name:
+          </div>
+          <div class="col-md-8">
+            <input type="text" class="form-control" id="name" placeholder="Cient Name" ng-model="clientName">
+          </div>
+        </div>
+        <div class="padding">
+          <div class="col-md-3">
+            Contact Number:
+          </div>
+          <div class="col-md-8">
+            <input type="text" class="form-control" id="contactNumber" placeholder="Contact Number" ng-model="clientContactNumber">
+          </div>
+        </div>
+        <div class="padding">
+          <div class="col-md-3">
+            Address:
+          </div>
+          <div class="col-md-8">
+            <input type="text" class="form-control" id="address" placeholder="Address" rows="3" ng-model="clientAddress"/>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class='btn btn-success' ng-click="add()" name="save"><i class="glyphicon glyphicon-plus"  data-dismiss="modal">Add Client</i>
+          <button class="btn btn-danger" data-dismiss="modal"><i class="glyphicon glyphicon-close"> Close </i></button>
+        </button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+<div class="modal fade" id="myModalEdit" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Edit Client</h4>
+      </div>
+      <div class="modal-body">
+        <div class="padding">
+          <div class="col-md-3">
+            Client name:
+          </div>
+          <div class="col-md-8">
+            <input class="form-control" id="name" placeholder="Client Name" ng-model="edit.name">
+          </div>
+        </div>
+        <div class="padding">
+          <div class="col-md-3">
+            Contact Number:
+          </div>
+          <div class="col-md-8">
+            <input class="form-control" id="contactNumber" placeholder="Client Contact Number" ng-model="edit.contactNumber">
+          </div>
+        </div>
+        <div class="padding">
+          <div class="col-md-3">
+            Address:
+          </div>
+          <div class="col-md-8">
+            <textarea class="form-control" id="address" placeholder="Address" rows="3" ng-model="edit.address"></textarea>
+          </div>
+        </div>
+        <br>
+        <br>
+        <br>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-success" ng-click="update(edit.id)" data-dismiss="modal"><span class="glyphicon glyphicon-check"></span> Save
+          <button class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Close</button>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<toaster-container toaster-options="{'time-out': 3000, 'close-button':true, 'animation-class': 'toast-top-right'}"></toaster-container>

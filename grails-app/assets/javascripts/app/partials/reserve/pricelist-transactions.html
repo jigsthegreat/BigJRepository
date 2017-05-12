@@ -1,0 +1,11 @@
+<div style="margin-top:6em">
+
+</div>
+<div>
+	<h1>PRICELIST TRANSACTIONS</h1>
+	<div ng-repeat="transaction in transactions">
+		<a ui-sref="pricelist-transaction({id: transaction.id})">Client # {{ transaction.client }}</a> - {{ transaction.id }} <button ng-click="delete(transaction.id)">DELETE</button>
+		<hr>
+	</div>
+</div>
+

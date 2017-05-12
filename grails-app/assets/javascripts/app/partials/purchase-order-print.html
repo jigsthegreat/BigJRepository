@@ -1,0 +1,234 @@
+<div class="container div-main">
+  <div class="container-fluid">
+    <table>
+      <tr>
+        <td> <img src="../BigJRepository/images/ibj.jpg"> </td>
+        <td>
+          <p class="print">ILOILO BIG J's MART CORP.</p>
+          <p class="print3"> Branch: {{ one.branch.address }}
+            <span ng-if="one.branch.contactNumber != null">Tel.: {{ one.branch.contactNumber }} </span>
+            <span ng-if="one.branch.faxNumber != null">Fax: {{ one.branch.faxNumber }} </span>
+            <span ng-if="one.branch.email != null">Email: {{ one.branch.email }} </span>
+          </p>
+        </td>
+        <td>
+          &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        </td>
+        <td>
+          <!-- {{ one.dateOrdered | date:'fullDate' }} -->
+          <br> No. {{ one.id }}
+          <br>
+          <b> PURCHASE ORDER </b>
+        </td>
+      </tr>
+    </table>
+    <div class="div-submain table-div">
+      <table>
+        <tr>
+          <td>
+            <p class="print2-1"><b> Name: </b> </p>
+          </td>
+          <td class="border" colspan="2">
+            <p class="print2-1"> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{{ one.supplier.name }} </p>
+          </td>
+          <td>
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+          </td>
+          <td>
+            <p class="print2-1"> <b>Date Ordered: </b></p>
+          </td>
+          <td class="border" colspan="2">
+            <p class="print2-1"> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{{ one.dateOrdered | date:'fullDate' }}</p>
+          </td>
+        </tr>
+        <!-- <tr>
+          <td>
+            &nbsp
+          </td>
+        </tr> -->
+        <tr>
+          <td>
+            <p class="print2-1"> <b> Contact Number: </b></p>
+          </td>
+          <td class="border" colspan="2">
+            <p class="print2-1"> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{{ one.supplier.contactNumber }}</p>
+          </td>
+          <td>
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+          </td>
+          <td>
+            <p class="print2-1"><b> Ship VIA: </b></p>
+          </td>
+          <td class="border">
+            <p class="print2-1"> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{{ one.shipVia }}</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p class="print2-1"> <b> Address: </b></p>
+          </td>
+          <td class="border" colspan="2">
+            <p class="print2-1"> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{{ one.supplier.address }}</p>
+          </td>
+          <td>
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+          </td>
+          <td>
+            <p class="print2-1"><b> Ordered by: </b></p>
+          </td>
+          <td class="border">
+            <p class="print2-1"> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{{ one.branch.name }}</p>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="row div-submain">
+      <table class="table table-bordered table-hover table-condensed tcolor">
+        <tr>
+          <!-- <th style="width:10%">Photo</th> -->
+          <th style="width:10%">Product Name</th>
+          <th style="width:8%">Quantity</th>
+          <th style="width:5%">Unit</th>
+          <th style="width:10%">Stock Number</th>
+          <th style="width:8%">Color</th>
+          <th style="width:15%">Description of Articles</th>
+          <th style="width:10%">Unit Price</th>
+          <th style="width:8%">Discount</th>
+          <th style="width:8%">Discounted Price</th>
+          <th style="width:8%">Total</th>
+          <th style="width:18%">Other Notes</th>
+        </tr>
+        <tr ng-repeat="product in products">
+          <!-- <td>
+            picture
+          </td> -->
+          <td>
+            {{ product.product.name }}
+          </td>
+          <td>
+            {{ product.quantity || 'empty'}}
+          </td>
+          <td>
+            {{ product.unit || 'empty'}}
+          </td>
+          <td>
+            {{ product.stockNumber || 'empty'}}
+          </td>
+          <td>
+            {{ product.product.color || 'empty'}}
+          </td>
+          <td>
+            {{ product.description || 'empty'}}
+          </td>
+          <td>
+            {{ product.unitPrice | currency:"₱" }}
+          </td>
+          <td>
+            {{ product.discount }}%
+          </td>
+          <td>
+            {{ ((product.unitPrice * 1) - product.unitPrice * (product.discount / 100)) }}
+          </td>
+          <td>
+            {{ ((product.unitPrice * 1) - product.unitPrice * (product.discount / 100)) * product.quantity | currency:"₱" }}
+          </td>
+          <td>
+            {{ product.notes }}
+          </td>
+        </tr>
+        <!-- <tr>
+          <td>&nbsp</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr> -->
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>Total: </td>
+          <td>{{ getTotal() | currency:"₱"}}</td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+    <div class="row">
+      <div class="col-md-12 col-md-offset-1">
+        <h5> <b> "NO INVOICE WILL BE PAID UNLESS ACCOMPANIED BY THE ORIGINAL COPY PURCHASE ORDER" </b> </h5>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <h5> <b> <u> STRICTLY </u> </b> </h5>
+      </div>
+    </div>
+    <table>
+      <tr>
+        <td> </td>
+      </tr>
+      <tr>
+        <td>
+          <p class="print2-1"> on or before: <u>{{ one.dateToReceive | date:'fullDate' }}</u></p>
+        </td>
+        <td> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </td>
+        <td> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </td>
+        <td> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </td>
+        <td> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </td>
+        <td> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </td>
+        <td> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </td>
+        <td>
+          <p class="print2-1"> Value at: </p>
+        </td>
+      </tr>
+    </table>
+    <div class="div-submain">
+      <p> OTHERWISE Acceptance of goods subject to the discretion of the one in charge.
+        <p>
+          <p> CONDITIONS: </p>
+          <ol>
+            <li> 1. Any stock shipped not quoted in this P.O. will not be honored and will be shipped back. </li>
+            <li> 2. Any changes in prices should be notified by supplier prior shipment of goods. </li>
+            <li> 3. Please attach this P.O. or a Xerox xopy together with the packing list and cargo. </li>
+          </ol>
+    </div>
+    <table>
+      <tr>
+        <td> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </td>
+        <td> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </td>
+        <td> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </td>
+        <td> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </td>
+        <td> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </td>
+        <td> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </td>
+        <td> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </td>
+        <td> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </td>
+        <td> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </td>
+        <td> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </td>
+        <td> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </td>
+        <td>
+          <center>
+            <p class="print2-1"> By: __________________________________________ </p>
+            <p class="print2-1"> Authorized Signature </p>
+          </center>
+        </td>
+      </tr>
+    </table>
+
+  </div>
+</div>
+
+<span class="cssclsNoPrint">
+  <button ng-click="print()" class="btn btn-default"><span class="glyphicon glyphicon-print"></span> Print</button>
+</span>

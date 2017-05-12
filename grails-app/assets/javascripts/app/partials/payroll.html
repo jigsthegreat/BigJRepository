@@ -1,0 +1,97 @@
+<div class="container div-main">
+    <h2>PAYROLL</h2>
+    <hr>
+    <div class="col-md-12">
+        Payroll Week Having The Date:
+        <p class="input-group">
+            <input type="text" class="form-control" datepicker-popup={{format}} ng-model="pickDate"
+                   max-date=maximumDate is-open="calendar.opened" close-text="Close"
+                   class="form-control">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="open($event)"><i
+                            class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+        </p>
+        <table st-table="displayedCollection" st-safe-src="employees"
+               class="table table-striped table-hover" ng-if="startDate != null">
+            <tbody>
+            <tr>
+                <th colspan="9">
+                    <input st-search="" class="form-control" placeholder="Employee">
+                </th>
+            </tr>
+            <tr>
+                <th st-sort="name">Full Name</th>
+                <th ng-repeat="num in numberOfDays">
+                    {{getResultDay(startDate,num) | date:'MMM dd, yy'}}
+                </th>
+                <th>Salary for The Week</th>
+                <th></th>
+            </tr>
+            <tr ng-repeat="employee in displayedCollection | filter:{ branch: { id: branch } }">
+                <td>
+                    <span>{{employee.firstName}} {{employee.lastName}}</span>
+                </td>
+                <td ng-repeat="day in numberOfDays">
+                    <span>{{getStatus(employee,getResultDay(startDate,day))}}</span>
+                </td>
+                <td>
+                    <span>{{getSalary(employee,startDate,getResultDay(startDate,numberOfDays.length))}}</span>
+                </td>
+                <td data-ng-if="accessAllowed()">
+                    <button class="btn btn-primary"
+                            ng-if="getSalary(employee,startDate,getResultDay(startDate,numberOfDays.length))!=0"
+                            ng-click="payWeeklySalary(employee,startDate,getResultDay(startDate,numberOfDays.length))">
+                        <span class="glyphicon glyphicon-check">Give Salary</span>
+
+                    </button>
+                    <button class="btn btn-danger"
+                            ng-if="getSalary(employee,startDate,getResultDay(startDate,numberOfDays.length))==0 && havePresentAttendance(employee,startDate)"
+                            ng-click="restoreWeeklyBalance(employee,startDate,getResultDay(startDate,numberOfDays.length))">
+                        Restore Salary
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!--<div>{{payroll.startDate| date:"MMM-dd-yyyy"}}::{{payroll.endDate| date:"MMM-dd-yyyy"}}</div>-->
+
+        <!--<div ng-repeat="employee in employees | filter:{ branch: { id: branch } }">-->
+        <!--{{employee.firstName}}:-->
+        <!--<div ng-repeat="attendance in employee.attendances |orderBy : 'attendance.date' :true">-->
+        <!--<div ng-if="findIfDayInRange(getAttendance(attendance.id).date)">-->
+        <!--{{getAttendance(attendance.id).date| date:"medium"}}:-->
+        <!--<span ng-if="!getAttendance(attendance.id).isPresent"> Absent</span>-->
+        <!--<span ng-if="getAttendance(attendance.id).isPresent && getAttendance(attendance.id).isWholeDay"> Whole Day</span>-->
+        <!--<span ng-if="getAttendance(attendance.id).isPresent && !getAttendance(attendance.id).isWholeDay">Half Day</span>-->
+
+        <!--<button class="btn btn-default"-->
+        <!--ng-if="!getAttendance(attendance.id).isPaymentReceived && accessAllowed() "-->
+        <!--ng-click="payOneDaySalary(attendance.id)">-->
+        <!--<span class="glyphicon glyphicon-check"></span> Pay Salary-->
+        <!--</button>-->
+        <!--<button class="btn btn-default"-->
+        <!--ng-if="getAttendance(attendance.id).isPaymentReceived && accessAllowed()"-->
+        <!--ng-click="restoreBalanceForOneDay(attendance.id)">-->
+        <!--<span class="glyphicon glyphicon-check"></span> Restore Balance-->
+        <!--</button>-->
+
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--<div>Remaining Balance Salary: P{{getSalary(employee.id, payroll.startDate, payroll.endDate)}}-->
+        <!--<button class="btn btn-default"-->
+        <!--ng-if="(getSalary(employee.id, payroll.startDate, payroll.endDate) != 0) && accessAllowed() "-->
+        <!--ng-click="payCollectiveSalary(employee.id)">-->
+        <!--<span class="glyphicon glyphicon-check"></span> Gave The WHOLE Salary-->
+        <!--</button>-->
+        <!--<button class="btn btn-default"-->
+        <!--ng-if="(getSalary(employee.id, payroll.startDate, payroll.endDate) == 0) && accessAllowed() "-->
+        <!--ng-click="restoreBalance(employee.id)">-->
+        <!--<span class="glyphicon glyphicon-check"></span> Restore The Balance of the Payment-->
+        <!--</button>-->
+        <!--</div>-->
+        <!--</div>-->
+    </div>
+</div>

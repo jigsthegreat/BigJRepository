@@ -1,0 +1,22 @@
+<div class="container div-main">
+	<div class="col-md-6 col-md-offset-3">
+		<div class="jumbotron vertical-center container-fluid">
+			<h2>Add Client</h2>
+			<hr>
+			<form class="form-horizontal" role="form">
+				<div class="form-group">
+					<input type="text" class="form-control" id="name" placeholder="Cient Name" ng-model="clientName">
+				</div>
+				<div class="form-group">
+					<input type="text" class="form-control" id="contactNumber" placeholder="Contact Number" ng-model="clientContactNumber">
+				</div>
+				<div class="form-group">
+					<textarea class="form-control" id="address" placeholder="Address" rows="3" ng-model="clientAddress"></textarea>
+				</div>
+				<div class="form-group pull-right">
+					<button class="btn btn-primary" ng-click="add()">Submit</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

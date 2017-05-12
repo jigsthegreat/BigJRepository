@@ -1,0 +1,449 @@
+<div class="container div-main">
+  <div class="container-fluid">
+    <toaster-container toaster-options="{'time-out': 3000, 'close-button':true, 'animation-class': 'toast-top-right'}"></toaster-container>
+    <!-- TRANSACTION # {{ one.id }} -->
+    <div class="well">
+      <table>
+        <tr>
+          <td>
+            <h4> <b> Supplier Name </b> </h4> </td>
+          <td>
+            <h4> <b> : </b> </h4> </td>
+          <td> &nbsp&nbsp&nbsp </td>
+          <td>
+            <h4> {{ one.supplier.name }} </h4> </td>
+        </tr>
+        <tr>
+          <td>
+            <h4> <b> Contact Number </b> </h4> </td>
+          <td>
+            <h4> <b> : </b> </h4> </td>
+          <td></td>
+          <td>
+            <h4> {{ one.supplier.contactNumber }} </h4> </td>
+        </tr>
+        <tr>
+          <td>
+            <h4> <b> Address </b> </h4> </td>
+          <td>
+            <h4> <b> : </b> </h4> </td>
+          <td></td>
+          <td>
+            <h4> {{ one.supplier.address }} </h4>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <h4> <b> Date Ordered </b> </h4> </td>
+          <td>
+            <h4> <b> : </b> </h4> </td>
+          <td></td>
+          <td>
+            <h4> {{ one.dateOrdered | date: 'medium'}} </h4> </td>
+        </tr>
+        <tr>
+          <td>
+            <h4> <b> Expected Date to be Received</b> </h4> </td>
+          <td>
+            <h4> <b> : </b> </h4> </td>
+          <td></td>
+          <td>
+            <h4> {{ one.dateToReceive | date: 'medium'}} ({{ formatDate(one.dateToReceive) }}) </h4> </td>
+        </tr>
+        <tr>
+          <td>
+            <h4> <b> Date Received </b> </h4> </td>
+          <td>
+            <h4> <b> : </b> </h4> </td>
+          <td></td>
+          <td>
+            <h4> <span ng-if="one.dateReceived != null">{{ one.dateReceived | date: 'medium'}}</span>
+              <span ng-if="one.dateReceived == null">Not yet received <button class="btn btn-info"  ng-if="accessAllowed()" ng-click="showDate()"><span class="glyphicon glyphicon-calendar"></span> Set Date</button>
+		<div ng-show="showDateBody">
+			<!-- Date received: -->
+            <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdown3" role="button" data-toggle="dropdown">
+                    <div class="input-group">
+                        <input type="text" class="form-control" data-ng-model="dateReceived" data-date-time-input="YYYY-MM-DD HH:mm a">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                        <button class="pull-right" ng-click="saveDateReceived(dateReceived)"><span class="glyphicon glyphicon-ok"></span> Submit</button>
+
+                    </div>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                    <datetimepicker data-ng-model="dateReceived" renderOn="03-03-2016"></datetimepicker>
+                </ul>
+            </div>
+
+		</div>
+              </h4> </td>
+        </tr>
+        <tr>
+          <td>
+            <h4> <b> Ship Via </b> </h4> </td>
+          <td>
+            <h4> <b> : </b> </h4> </td>
+          <td></td>
+          <td>
+            <h4> {{ one.shipVia }} </h4> </td>
+        </tr>
+        <tr>
+          <td>
+            <h4> <b> Ordered By </b> </h4> </td>
+          <td>
+            <h4> <b> : </b> </h4> </td>
+          <td></td>
+          <td>
+            <h4> {{ one.branch.name }} </h4> </td>
+        </tr>
+      </table>
+      <div>
+        <button class="btn btn-print" ui-sref="purchase-order-print({id: one.id})" ng-if="accessAllowed()"><span class="glyphicon glyphicon-print"></span> Print</button>
+      </div>
+    </div>
+    <div ng-if="one.dateReceived != null">
+      ALREADY RECEIVED
+    </div>
+    <!-- <div ng-if="one.dateReceived == null">
+		NOT YET RECEIVED
+		<button ng-click="showDate()">Add date Received</button>
+		<div ng-show="showDateBody">
+			Date received:
+            <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdown3" role="button" data-toggle="dropdown">
+                    <div class="input-group">
+                        <input type="text" class="form-control" data-ng-model="dateReceived" data-date-time-input="YYYY-MM-DD HH:mm a">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    </div>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                    <datetimepicker data-ng-model="dateReceived" renderOn="03-03-2016"></datetimepicker>
+                </ul>
+                {{ dateReceived | date: 'fullDate'}}
+            </div>
+            <div>
+            	<button ng-click="saveDateReceived(dateReceived)">submit</button>
+            </div>
+		</div>
+	</div> -->
+    <!-- <button class="btn btn-info btn-lg" ui-sref="purchase-order-print({id: one.id})">PRINT</button> -->
+    <!-- <button class="btn btn-info btn-lg" ng-click="print('waow')">PRINT</button> -->
+    <h2>Purchase Order # {{ one.id }}</h2>
+
+    <!-- <h4>Angular-xeditable Editable row (Bootstrap 3)</h4> -->
+    <table class="table table-bordered table-hover table-condensed">
+      <tr style="font-weight: bold">
+        <td>Photo</td>
+        <td style="width:10%">Product Name</td>
+        <td style="width:5%">Quantity</td>
+        <td style="width:5%">Unit</td>
+        <td style="width:10%">Stock Number</td>
+        <td style="width:5%">Color</td>
+        <td style="width:15%">Description</td>
+        <td style="width:10%">Unit Price</td>
+        <td style="width:5%">Discount (Per unit)</td>
+        <td style="width:5%">Discounted Price</td>
+        <td style="width:10%">Total</td>
+        <td style="width:15%">Other Notes</td>
+        <td style="width:5%" ng-if="one.dateReceived == null">
+          <button class="btn btn-primary" ng-if="accessAllowed()" data-toggle="modal" data-target="#modalAddOrder" data-dismiss="modal"><span class="glyphicon glyphicon-plus"></span> Add Order</button>
+        </td>
+        <td style="width:5%" ng-if="one.dateReceived != null">
+
+        </td>
+      </tr>
+      <tr ng-repeat="product in products">
+        <td>
+          <div ng-if="product.product.photo_extension != null">
+            <img ng-src="../BigJRepository/images/{{product.product.id}}.{{product.product.photo_extension}}" width="100">
+          </div>
+          <div ng-if="product.product.photo_extension == null">
+            <img ng-src="../BigJRepository/images/default.jpg" width="100">
+          </div>
+        </td>
+        <td>
+          {{ product.product.name }}
+        </td>
+        <td>
+          <span editable-text="product.quantity" e-name="quantity" e-form="rowform" e-required>
+	  	{{ product.quantity || 'empty'}}
+	</span>
+        </td>
+        <td>
+          <!-- <span editable-text="product.unit" e-name="unit" e-form="rowform" e-required> -->
+	  	{{ product.unit || 'empty'}}
+	<!-- </span> -->
+        </td>
+        <td>
+          <!-- <span editable-text="product.stockNumber" e-name="stockNumber" e-form="rowform" e-required> -->
+          {{ product.stockNumber || 'empty'}}
+          <!-- </span> -->
+        </td>
+        <td>
+          <!-- <span editable-text="product.color" e-name="color" e-form="rowform" e-required> -->
+          {{ product.product.color || 'empty'}}
+          <!-- </span> -->
+        </td>
+        <td>
+          <span editable-text="product.description" e-name="description" e-form="rowform" e-required>
+      {{ product.description || 'empty'}}
+  </span>
+        </td>
+        <td>
+          <span editable-text="product.unitPrice" e-name="unitPrice" e-form="rowform" e-required>
+      {{ product.unitPrice | currency:"₱" }}
+  </span>
+        </td>
+        <td>
+          <span editable-text="product.discount" e-name="discount" e-form="rowform" e-required>
+	          	{{ product.discount }}%
+	        </span>
+        </td>
+        <td>
+          {{ ((product.unitPrice * 1) - product.unitPrice * (product.discount / 100)) | currency:"₱" }}
+        </td>
+        <td>
+          <!-- {{ product.quantity * product.price }} -->
+          {{ ((product.unitPrice * 1) - product.unitPrice * (product.discount / 100)) * product.quantity | currency:"₱" }}
+        </td>
+        <td>
+          <span editable-text="product.notes" e-name="notes" e-form="rowform" e-required>
+	  	{{ product.notes }}
+	</span>
+        </td>
+        <div>
+          <!-- {{ one.dateReceived | date: 'medium'}} -->
+          <td style="white-space: nowrap" ng-show="one.dateReceived == null">
+            <!-- form -->
+            <form editable-form name="rowform" onbeforesave="saveUser($data, product.id)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == product">
+              <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-success">
+                <span class="glyphicon glyphicon-ok"></span> Save
+              </button>
+              <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-danger">
+                <span class="glyphicon glyphicon-remove"></span> Cancel
+              </button>
+            </form>
+            <div class="buttons" ng-show="!rowform.$visible">
+              <button class="btn btn-success" ng-click="rowform.$show()"  ng-if="accessAllowed()"><span class="glyphicon glyphicon-check" ></span> Update</button>
+              <button class="btn btn-danger" mwl-confirm title="Remove" message="Do you want to remove this product?" confirm-text="<span class='glyphicon glyphicon-ok'></span> Yes" cancel-text="<span class='glyphicon glyphicon-remove'></span> No" placement="top" on-confirm="removeUser($index, product)"
+                on-cancel="cancelClicked = true" confirm-button-type="primary" cancel-button-type="danger"  ng-if="accessAllowed()"><span class="glyphicon glyphicon-trash"></span> Remove</button>
+            </div>
+          </td>
+        </div>
+        <td ng-show="one.dateReceived != null">
+          <!-- <button ng-click="addToStorage()">
+						Add to storage?
+					</button> -->
+          <!-- <button class="btn btn-primary" data-toggle="modal" data-target="#modalAddToStorage" ng-model="showModal(product.product)" data-dismiss="modal" ><span class="glyphicon glyphicon-plus"></span> Add To Storage?</button> -->
+          <button type="button" class="btn btn-info" mwl-confirm title="Add" message="Do you want to add this quantity({{product.quantity}}) in the storage?" confirm-text="<span class='glyphicon glyphicon-ok'></span> Yes" cancel-text="<span class='glyphicon glyphicon-remove'></span> No"
+            placement="top" on-confirm="addToStorage(product.quantity, product.product.id, product.id)" on-cancel="cancelClicked = true"   confirm-button-type="primary"
+              cancel-button-type="danger" ng-if="!product.stored">Add to Storage</button>
+          <button class="btn btn-default" ng-if="product.stored" ng-disabled="true">Already stored :)</button>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>Total: {{ getTotal() | currency:"₱"}}</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="modal fade" id="modalAddOrder" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Add Product</h4>
+          <div>
+            <label>
+              <input type="radio" ng-model="$parent.selected" value="old" ng-change="onChange('old')"> OLD
+            </label>
+            <label>
+              <input type="radio" ng-model="$parent.selected" value="new" ng-change="onChange('new')"> NEW
+            </label>
+            <!-- <br> Selected thing: {{selected}} -->
+          </div>
+        </div>
+        <div class="modal-body">
+
+          <div ng-show="selected=='old'">
+            Re-stock
+            <div class="padding">
+              <div class="col-md-3">
+                Existing Product
+              </div>
+              <div class="col-md-8">
+                <select ng-model="storageProduct" class="form-control" ng-change="selectedItemChanged(storageProduct)">
+                  <option ng-repeat="prod in prods" value="{{prod.product.id}}">{{ prod.product.name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="padding">
+              <div class="col-md-3">
+                <i>Quantity in Storage:</i>
+              </div>
+              <div class="col-md-8">
+                <i>{{ itemInstance.quantity }}</i>
+              </div>
+            </div>
+            <div class="padding">
+              <div class="col-md-3">
+                <i>Unit in Storage:</i>
+              </div>
+              <div class="col-md-8">
+                <i>{{ itemInstance.unit }}</i>
+              </div>
+            </div>
+          </div>
+
+          <div ng-show="selected=='new'">
+            NEW PRODUCT
+            <div class="padding">
+              <div class="col-md-3">
+                Product Name:
+              </div>
+              <div class="col-md-8">
+                <input type="text" ng-model="productName" class="form-control" placeholder="Product Name">
+              </div>
+            </div>
+            <div class="padding">
+              <div class="col-md-3">
+                Color:
+              </div>
+              <div class="col-md-8">
+                <input type="text" ng-model="productColor" class="form-control" placeholder="Color">
+              </div>
+            </div>
+            <div class="padding">
+              <div class="col-md-3">
+                Size:
+              </div>
+              <div class="col-md-8">
+                <input type="text" ng-model="productSize" class="form-control" placeholder="Size">
+              </div>
+            </div>
+            <div class="padding">
+              <div class="col-md-3">
+                Description:
+              </div>
+              <div class="col-md-8">
+                <input type="text" ng-model="productDescription" class="form-control" placeholder="Description">
+              </div>
+            </div>
+            <div class="padding">
+              <div class="col-md-3">
+                Stock Number:
+              </div>
+              <div class="col-md-8">
+                <input type="text" ng-model="stockNumber" class="form-control" placeholder="Stock Number">
+              </div>
+            </div>
+            <div class="padding">
+              <div class="col-md-3">
+                Unit:
+              </div>
+              <div class="col-md-8">
+                <input type="text" ng-model="unit" class="form-control" placeholder="Unit">
+              </div>
+            </div>
+            <div class="padding">
+              <div class="col-md-3">
+                Price:
+              </div>
+              <div class="col-md-8">
+                <input type="number" ng-model="productPrice" class="form-control" placeholder="Price">
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div ng-show="hasPick">
+            <div class="padding">
+              <div class="col-md-3">
+                Quantity:
+              </div>
+              <div class="col-md-8">
+                <input type="number" ng-model="quantity" class="form-control" placeholder="Quantity">
+              </div>
+            </div>
+            <!-- <div class="padding">
+              <div class="col-md-3">
+                Unit:
+              </div>
+              <div class="col-md-8">
+                <input type="text" ng-model="unit" class="form-control" placeholder="Unit">
+              </div>
+            </div> -->
+            <div class="padding">
+              <div class="col-md-3">
+                Discount:
+              </div>
+              <div class="col-md-8">
+                <input type="number" ng-model="discount" class="form-control" placeholder="Discount in Percent" min="0" max="100">
+              </div>
+            </div>
+            <div class="padding">
+              <div class="col-md-3">
+                Description:
+              </div>
+              <div class="col-md-8">
+                <input type="text" ng-model="description" class="form-control" placeholder="Description">
+              </div>
+            </div>
+            <div class="padding">
+              <div class="col-md-3">
+                Unit Price:
+              </div>
+              <div class="col-md-8">
+                <input type="number" ng-model="unitPrice" class="form-control" placeholder="Unit Price">
+              </div>
+            </div>
+            <div class="padding">
+              <div class="col-md-3">
+                Other Notes:
+              </div>
+              <div class="col-md-8">
+                <input type="text" ng-model="notes" class="form-control" placeholder="Other Notes">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-toggle="modal" ng-click="addUser()" data-dismiss="modal">
+            <span class="glyphicon glyphicon-plus"></span> Add Order
+          </button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- add to storage -->
+  <div class="modal fade" id="modalAddToStorage" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          Add to Storage
+        </div>
+        <div class="form-group">
+          Quantity:
+          <input type="text" ng-model="itemQuantity" class="form-control" placeholder="Quantity"> Quantity in storage: {{ productToStore.quantity }}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-toggle="modal" ng-click="addToStorage()" data-dismiss="modal">
+          <span class="glyphicon glyphicon-check"></span> Submit
+        </button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

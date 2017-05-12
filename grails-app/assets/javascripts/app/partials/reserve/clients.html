@@ -1,0 +1,50 @@
+<div class="container" style="margin-top:2em">
+  <div class="page-header" id="banner">
+    <div class="row">
+      <div class="col-md-12">
+        <h1>CLIENTS LIST</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mainTable col-md-8 col-md-offset-2">
+  <table st-table="displayedCollection" st-safe-src="clients" class="table table-striped">
+    <tbody>
+      <tr>
+        <th>
+          <input st-search="name" class="form-control" placeholder="Client's name">
+        </th>
+      </tr>
+
+      <tr>
+        <th st-sort="name">Name</th>
+        <th st-sort="name">Contact Number</th>
+        <th st-sort="name">Address</th>
+        <th>
+          <button type="button" class="btn btn-primary" ui-sref="add-client"><span class="glyphicon glyphicon-plus"></span> Add Client
+          </button>
+        </th>
+      </tr>
+
+      <tr ng-repeat="row in displayedCollection">
+        <td>
+          <span>{{row.name}}</span>
+        </td>
+        <td>
+          <span>{{row.contactNumber}}</span>
+        </td>
+        <td>
+          <span>{{row.address}}</span>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="5" class="text-center">
+          <div st-pagination="" st-items-by-page="5" st-displayed-pages="5"></div>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
