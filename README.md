@@ -55,7 +55,7 @@ cd BigJRepository
 grails run-app  
 ```
 
-Now you can connect to the server localhost:8080 (pa check b kng anu man gd)
+Now you can connect to the server localhost:8080
 
 #### Linux
 * Open terminal
@@ -75,8 +75,11 @@ grails run-app
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system.
-IDK anu isulat ta d. or if maysulaton pata d. refer [here](http://docs.grails.org/3.0.17/guide/deployment.html)
+*For WAR file
+```
+grails war
+```
+And refer [here](http://docs.grails.org/3.0.17/guide/deployment.html)
 
 ## Built With
 
@@ -95,6 +98,4 @@ IDK anu isulat ta d. or if maysulaton pata d. refer [here](http://docs.grails.or
 
 ## Acknowledgments
 
-*
-*
-*
+* Iloilo Big J's Mart for accomodating questions. 
